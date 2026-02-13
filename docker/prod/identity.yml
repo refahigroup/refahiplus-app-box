@@ -1,0 +1,19 @@
+
+name: refahi_prod
+
+services:
+  prod_identity:
+    image: ghcr.io/refahigroup/refahi-identity:prod
+    container_name: prod_identity
+    networks:
+      - refahi_prod_net
+    restart: always
+    environment:
+      TZ: "Asia/Tehran"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      DB_USER: "${REFAHI_PROD_IDENTITY_DB_USER}"
+      DB_PASSWORD: "${REFAHI_PROD_IDENTITY_DB_PASSWORD}"          
+      
+networks:
+  refahi_prod_net:
+    external: true

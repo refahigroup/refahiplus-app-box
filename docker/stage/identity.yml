@@ -1,0 +1,20 @@
+version: "3.9"
+
+name: refahi_stage
+
+services:
+  stage_identity:
+    image: ghcr.io/refahigroup/refahi-identity:stage
+    container_name: stage_identity
+    networks:
+      - refahi_stage_net
+    restart: always
+    environment:
+      TZ: "Asia/Tehran"
+      ASPNETCORE_ENVIRONMENT: "Staging"
+      DB_USER: "${REFAHI_STAGE_IDENTITY_DB_USER}"
+      DB_PASSWORD: "${REFAHI_STAGE_IDENTITY_DB_PASSWORD}"          
+      
+networks:
+  refahi_stage_net:
+    external: true

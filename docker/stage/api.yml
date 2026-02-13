@@ -1,0 +1,23 @@
+version: "3.9"
+
+name: refahi_stage
+
+services:
+  stage_api:
+    image: ghcr.io/refahigroup/refahi-api:stage
+    container_name: stage_api
+    networks:
+      - refahi_stage_net
+    restart: always
+    environment:
+      TZ: "Asia/Tehran"
+      ASPNETCORE_ENVIRONMENT: "Staging"
+      DB_USER: "${REFAHI_STAGE_DB_USER}"
+      DB_PASSWORD: "${REFAHI_STAGE_DB_PASSWORD}"  
+      JWT_KEY: "${REFAHI_STAGE_JWT_KEY}"
+      SMS_API_KEY: "${REFAHI_STAGE_SMS_API_KEY}"
+      EMAIL_TOKEN: "${REFAHI_STAGE_EMAIL_TOKEN}"         
+      
+networks:
+  refahi_stage_net:
+    external: true

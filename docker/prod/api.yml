@@ -1,0 +1,22 @@
+
+name: refahi_prod
+
+services:
+  prod_api:
+    image: ghcr.io/refahigroup/refahi-api:prod
+    container_name: prod_api
+    networks:
+      - refahi_prod_net
+    restart: always
+    environment:
+      TZ: "Asia/Tehran"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      DB_USER: "${REFAHI_PROD_DB_USER}"
+      DB_PASSWORD: "${REFAHI_PROD_DB_PASSWORD}"  
+      JWT_KEY: "${REFAHI_PROD_JWT_KEY}"
+      SMS_API_KEY: "${REFAHI_PROD_SMS_API_KEY}"
+      EMAIL_TOKEN: "${REFAHI_PROD_EMAIL_TOKEN}"         
+      
+networks:
+  refahi_prod_net:
+    external: true

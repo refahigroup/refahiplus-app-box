@@ -1,0 +1,18 @@
+version: "3.9"
+
+name: refahi_stage
+
+services:
+  stage_webapp:
+    image: registry.refahi.xyz/refahi-plus/clients/web-app:stage
+    container_name: stage_webapp
+    networks:
+      - refahi_stage_net
+    restart: always
+    environment:
+      TZ: "Asia/Tehran"
+      ASPNETCORE_ENVIRONMENT: "Staging"
+
+networks:
+  refahi_stage_net:
+    external: true

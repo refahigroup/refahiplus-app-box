@@ -1,0 +1,42 @@
+name: refahi_infra
+
+services:
+  infra_nginx:
+    image: nginx:latest
+    container_name: infra_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /opt/refahi-infra/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /opt/refahi-infra/nginx/conf.d:/etc/nginx/conf.d
+      - /opt/refahi-data/certbot/www:/var/www/certbot:ro
+      - /opt/refahi-data/certbot/conf:/etc/letsencrypt:ro
+      - /opt/refahi-data/nginx/logs:/var/log/nginx
+
+    networks:
+      - refahi_infra_net
+      - refahi_prod_net
+      - refahi_stage_net
+      - refahigroup_prod_net
+    restart: always
+
+  certbot:
+    image: certbot/certbot
+    container_name: infra_certbot
+    entrypoint: [ "sh", "-c", "sleep infinity" ]
+    volumes:
+      - /opt/refahi-data/certbot/conf:/etc/letsencrypt
+      - /opt/refahi-data/certbot/www:/var/www/certbot
+    networks:
+      - refahi_infra_net    
+
+networks:
+  refahi_infra_net:
+    external: true
+  refahi_prod_net:
+    external: true
+  refahi_stage_net:
+    external: true
+  refahigroup_prod_net:
+    external: true

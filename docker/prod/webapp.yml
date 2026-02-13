@@ -1,0 +1,17 @@
+
+name: refahi_prod
+
+services:
+  prod_webapp:
+    image: registry.refahi.xyz/refahi-plus/clients/web-app:prod
+    container_name: prod_webapp
+    networks:
+      - refahi_prod_net
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      TZ: "Asia/Tehran"
+
+networks:
+  refahi_prod_net:
+    external: true

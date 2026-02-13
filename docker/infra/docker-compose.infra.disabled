@@ -1,0 +1,102 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: infra_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: refahi
+      POSTGRES_PASSWORD: change_me_strong
+      # (refahi_prod, refahi_stage)
+    volumes:
+      - /opt/refahi-data/postgres:/var/lib/postgresql/data
+    networks:
+      - refahi_infra
+
+  redis:
+    image: redis:7
+    container_name: infra_redis
+    restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - /opt/refahi-data/redis:/data
+    networks:
+      - refahi_infra
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: infra_rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: refahi
+      RABBITMQ_DEFAULT_PASS: change_me_strong
+    #ports:
+    #  - "15672:15672"
+    volumes:
+      - /opt/refahi-data/rabbitmq:/var/lib/rabbitmq
+    networks:
+      - refahi_infra
+
+  elasticsearch:
+    image: elasticsearch:8.14.0
+    container_name: infra_elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /opt/refahi-data/elasticsearch:/usr/share/elasticsearch/data
+    #ports:
+      #- "9200:9200"
+    networks:
+      - refahi_infra
+
+  nginx:
+    image: nginx:stable
+    container_name: infra_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /opt/refahi-infra/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /opt/refahi-infra/nginx/conf/sites:/etc/nginx/sites:ro
+      - /opt/refahi-data/certbot/www:/var/www/certbot:ro
+      - /opt/refahi-data/certbot/conf:/etc/letsencrypt:ro
+      - /opt/refahi-data/nginx/logs:/var/log/nginx
+    networks:
+      - refahi_infra
+
+
+  certbot:
+    image: certbot/certbot
+    container_name: infra_certbot
+    entrypoint: [ "sh", "-c", "sleep infinity" ]
+    volumes:
+      - /opt/refahi-data/certbot/conf:/etc/letsencrypt
+      - /opt/refahi-data/certbot/www:/var/www/certbot
+    networks:
+      - refahi_infra
+
+  pg-backup:
+    image: postgres:16
+    container_name: infra_pg_backup
+    restart: always
+    environment:
+      PGPASSWORD: change_me_strong
+    volumes:
+      - ../../postgres/backup.sh:/backup.sh:ro
+      - /opt/refahi-data/backups/postgres:/backup
+    entrypoint: [ "bash", "-c", "/backup.sh" ]
+    networks:
+      - refahi_infra
+
+networks:
+  refahi_infra:
+    driver: bridge

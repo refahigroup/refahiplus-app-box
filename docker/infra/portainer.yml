@@ -1,0 +1,23 @@
+
+name: refahi_infra
+
+services:
+  infra_portainer:
+    image: portainer/portainer-ce:latest
+    container_name: infra_portainer
+    restart: always
+    command: --http-enabled --base-url=/pr
+    ports:
+       - "3142:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - refahi_infra_net
+
+volumes:
+  portainer_data:
+
+networks:
+  refahi_infra_net:
+    external: true

@@ -1,0 +1,5 @@
+# Renew SSL certificates every night at 3 AM
+0 3 * * * /usr/bin/bash /opt/refahi-infra/certbot/renew-certs.sh >> /var/log/certbot-renew.log 2>&1
+
+# Cleanup old Postgres backups (older than 7 days) every night at 4 AM
+0 4 * * * /usr/bin/find /opt/refahi-infra/postgres/backups -type f -mtime +7 -delete

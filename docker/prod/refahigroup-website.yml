@@ -1,0 +1,16 @@
+
+name: refahigroup_prod
+
+services:
+  prod_webapp:
+    image: ghcr.io/refahigroup/refahigroup-website:prod
+    container_name: refahigroup_prd_website
+    networks:
+      - refahigroup_prod_net
+    restart: always
+    environment:
+      TZ: "Asia/Tehran"
+
+networks:
+  refahigroup_prod_net:
+    external: true

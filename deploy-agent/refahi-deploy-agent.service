@@ -1,0 +1,16 @@
+[Unit]
+Description=Refahi Deploy Agent (FastAPI)
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+WorkingDirectory=/opt/refahi-infra/deploy-agent
+EnvironmentFile=/etc/refahi-deploy-agent.env
+ExecStart=/usr/bin/env uvicorn app:app --host 0.0.0.0 --port 3142
+Restart=always
+RestartSec=5
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

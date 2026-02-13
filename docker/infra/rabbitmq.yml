@@ -1,0 +1,28 @@
+
+name: infra
+
+services:
+  infra_rabbitmq:
+    image: rabbitmq:3-management
+    container_name: infra_rabbitmq
+    #ports:
+    #  - "15672:15672"  # UI
+    #  - "5672:5672"    # broker
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit-user
+      RABBITMQ_DEFAULT_PASS: RRrefo@1$c23
+    volumes:
+      - /opt/Refahi/refahi-data/rabbitmq:/var/lib/rabbitmq
+    restart: always
+    networks:
+      - refahi_infra_net
+      - refahi_prod_net
+      - refahi_stage_net
+
+networks:
+  refahi_infra_net:
+    external: true
+  refahi_prod_net:
+    external: true
+  refahi_stage_net:
+    external: true  

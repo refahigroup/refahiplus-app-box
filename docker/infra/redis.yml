@@ -1,0 +1,29 @@
+
+name: refahi_infra
+
+services:
+  infra_redis:
+    image: redis:6.2-alpine
+    container_name: infra_redis
+    restart: always
+    #ports:
+    #  - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - /opt/Refahi/refahi-data/redis:/data
+    networks:
+      - refahi_infra_net
+      - refahi_prod_net
+      - refahi_stage_net
+      
+volumes:
+  infra_redis:
+    driver: local
+
+networks:
+  refahi_infra_net:
+    external: true
+  refahi_prod_net:
+    external: true
+  refahi_stage_net:
+    external: true      

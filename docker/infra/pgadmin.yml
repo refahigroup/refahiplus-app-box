@@ -1,0 +1,20 @@
+
+name: refahi_infra
+
+services:
+
+  infra_pgadmin:
+    image: dpage/pgadmin4
+    container_name: infra_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@example.com
+      PGADMIN_DEFAULT_PASSWORD: password_secret
+      PGADMIN_LISTEN_PORT: 80
+      SCRIPT_NAME: /pg
+    networks:
+      - refahi_infra_net
+
+networks:
+  refahi_infra_net:
+    external: true
