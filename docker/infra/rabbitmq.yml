@@ -10,9 +10,10 @@ services:
     #  - "5672:5672"    # broker
     environment:
       RABBITMQ_DEFAULT_USER: rabbit-user
-      RABBITMQ_DEFAULT_PASS: RRrefo@1$c23
+      RABBITMQ_DEFAULT_PASS: "RRrefo__1!c23"
     volumes:
       - /opt/Refahi/refahi-data/rabbitmq:/var/lib/rabbitmq
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro      
     restart: always
     networks:
       - refahi_infra_net
